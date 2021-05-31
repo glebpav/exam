@@ -1,0 +1,122 @@
+#include <iostream>
+#include <string>
+#include <vector>
+#include <string>
+#include <queue>
+#include <stack>
+#include <cmath>
+#include <fstream>
+
+using namespace std;
+
+string signes = "|&";
+
+bool sloveIt (string str){
+    //cout << str << endl;
+    int maxP = -1, idx;
+    for (int i=0;i<str.size();i++){
+        int pos = signes.find(str[i]);
+        if (pos != string::npos && pos > maxP){
+            maxP= pos;
+            idx = i;
+        }
+    }
+    //cout << "-" <<maxP << " " << idx << endl;
+    if (maxP == -1)
+        return str=="0"?0:1;
+    //cout << str.substr(0, idx) << endl << str.substr(idx+1) << endl;
+
+    if (maxP == 0){
+        //cout << (sloveIt(str.substr(0, idx)) || sloveIt(str.substr(idx+1))) << endl;
+        return sloveIt(str.substr(0, idx)) || sloveIt(str.substr(idx+1));
+    }
+    if (maxP == 1){
+        //cout << (sloveIt(str.substr(0, idx)) && sloveIt(str.substr(idx+1))) << endl;
+        return sloveIt(str.substr(0, idx)) && sloveIt(str.substr(idx+1));
+    }
+
+    return 1;
+}
+
+
+string clearScopes(string str){
+    while(str.find("(") != string::npos){
+        int pos = str.rfind("(");
+
+        string buf = "";
+        int endIdx;
+        for (int i = pos+1;str[i] != ')';i++){
+            buf += str[i];
+            endIdx = i;
+        }
+        //cout <<"--- " << buf << endl;
+        if (sloveIt(buf))
+        str.replace(str.rfind("("), endIdx+2 - pos, "1");
+        else str.replace(str.rfind("("), endIdx+2 - pos, "0");
+        //cout << str << endl;
+    }
+    return str;
+}
+
+
+int main(){
+    string inputStr;
+
+    bool a, b, c;
+    string buf;
+    cin >> buf;
+    if (buf == "true")a = 1;
+    else a = 0;
+    cin >> buf;
+    if (buf == "true")b = 1;
+    else b = 0;
+    cin >> buf;
+    if (buf == "true")c = 1;
+    else c = 0;
+
+    getline(cin, inputStr);
+    getline(cin, inputStr);
+
+    while(inputStr.find("and") != string::npos){
+        inputStr = inputStr.replace(inputStr.find("and"), 3, "&");
+        //cout << inputStr <<endl;
+    }
+
+    while(inputStr.find("not") != string::npos){
+        inputStr = inputStr.replace(inputStr.find("not"), 3, "!");
+        //cout << inputStr <<endl;
+    }
+
+    while(inputStr.find("or") != string::npos){
+        inputStr = inputStr.replace(inputStr.find("or"), 2, "|");
+        //cout << inputStr <<endl;
+    }
+
+    while(inputStr.find(" ") != string::npos){
+        inputStr = inputStr.replace(inputStr.find(" "), 1, "");
+       //cout << inputStr <<endl;
+    }
+
+    while(inputStr.find("a") != string::npos){
+        if (a) inputStr = inputStr.replace(inputStr.find("a"), 1, "1");
+        else inputStr = inputStr.replace(inputStr.find("a"), 1, "0");
+       //cout << inputStr <<endl;
+    }
+    while(inputStr.find("b") != string::npos){
+        if (b) inputStr = inputStr.replace(inputStr.find("b"), 1, "1");
+        else inputStr = inputStr.replace(inputStr.find("b"), 1, "0");
+    }
+    while(inputStr.find("c") != string::npos){
+        if (c) inputStr = inputStr.replace(inputStr.find("c"), 1, "1");
+        else inputStr = inputStr.replace(inputStr.find("c"), 1, "0");
+    }
+
+    while(inputStr.find("!") != string::npos){
+        if (inputStr[inputStr.find("!")+2] == '1') inputStr = inputStr.replace(inputStr.find("!"), 4, "0");
+        else inputStr = inputStr = inputStr.replace(inputStr.find("!"), 4, "0");
+    }
+
+    //cout << clearScopes(inputStr) << endl;
+    //cout << " --------- " << endl;
+    cout << (sloveIt(inputStr)? "true" : "false");
+}

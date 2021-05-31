@@ -1,0 +1,37 @@
+#include <iostream>
+#include <string>
+#include <vector>
+#include <string>
+#include <queue>
+#include <stack>
+#include <cmath>
+#include <fstream>
+
+using namespace std;
+
+int main(){
+    string strInput;
+    ifstream fin;
+	fin.open("input.txt");
+    fin >> strInput;
+    int maxLen = 0;
+	bool flag = 0;
+    char open, bestOpen = 'Z';
+    int len;
+    for (int i=0;i<strInput.size();i++){
+        open = strInput[i];
+        len = 0;
+        for (int q=i+1;q<strInput.size();q++){
+        if (strInput[q] == open){
+        len = q-i-1;
+        flag = 1;
+        }
+        }
+        if (len > maxLen || len == maxLen && bestOpen > open){
+        maxLen = len;
+        bestOpen = open;
+        }
+    }
+	if (flag == 0)cout << 0;
+    else cout << open << " " << maxLen;
+}

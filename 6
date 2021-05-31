@@ -1,0 +1,45 @@
+#include <iostream>
+#include <string>
+#include <vector>
+#include <string>
+#include <queue>
+#include <stack>
+#include <cmath>
+#include <fstream>
+
+using namespace std;
+
+void colorPoint(int x, int y, int colorBeg, int colorNew, vector < vector <int> > &array){
+    //if (array[y][x] == colorNew)return;
+    //cout << " adsfadsdfasdf" <<endl;
+    array[y][x] = colorNew;
+    if (y-1 >= 0 && array[y-1][x] == colorBeg)colorPoint(x, y-1, colorBeg, colorNew, array);
+    if (x-1 >= 0 && array[y][x-1] == colorBeg)colorPoint(x-1, y, colorBeg, colorNew, array);
+    if (y+1 < array.size() && array[y+1][x] == colorBeg)colorPoint(x, y+1, colorBeg, colorNew, array);
+    if (x+1 < array.size() && array[y][x+1] == colorBeg)colorPoint(x+1, y, colorBeg, colorNew, array);
+}
+
+int main(){
+    int x, y;
+    cin >> y >> x;
+    vector < vector <int> > array (y, vector <int> (x));
+
+    int x1, y1, newCol;
+
+    cin >> y1 >> x1 >> newCol;
+
+    for (int i=0;i<y;i++){
+        for (int q=0;q<x;q++){
+            cin >> array[i][q];
+        }
+    }
+    colorPoint(x1, y1, array[y1][x1], newCol, array);
+
+    for (int i=0;i<y;i++){
+        for (int q=0;q<x;q++){
+            cout << array[i][q] << " ";
+        }
+        cout << endl;
+    }
+    string st;
+}

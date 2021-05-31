@@ -1,0 +1,41 @@
+#include <iostream>
+#include <vector>
+#include <string>
+#include <cmath>
+
+using namespace std;
+
+vector <vector <int> > mainV;
+string alph = "AFIN";
+
+void findNum(vector <int> v, int len) {
+    if (v.size() == len) {
+        mainV.push_back(v);
+        return;
+    }
+
+    for (int i = 0;i < 4;i++) {
+        v.push_back(i);
+        findNum(v, len);
+        v.erase(v.end() - 1);
+    }
+
+}
+
+int main()
+{
+    int num, count, q;
+    cin >> num >> count >> q;
+    vector <int> v;
+    findNum(v, count);
+
+    // almost
+    for (int i=0;i<mainV.size();i++){
+        for (int q=0;q<mainV[i].size();q++){
+            //cout << mainV[i][q] << " ";
+        }
+        //cout << endl;
+    }
+    cout << "ERROR";
+
+}
